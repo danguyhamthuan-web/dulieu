@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Báo cáo số liệu thực hiện Nghị quyết 04-NQ/TW</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --red:#8c1515; --red2:#a71d1d; --bg:#f4f5f7; --card:#fff;
+    --line:#dcdfe4; --ink:#1f2328; --mut:#5b6572; --gold:#c49a3a;
+    --ok:#1a7f37; --prog:#0969da; --warn:#bf8700; --bad:#cf222e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Times New Roman",Georgia,serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5}
+  .wrap{max-width:1100px;margin:0 auto;padding:16px}
+  header{background:var(--red);color:#fff;padding:18px 16px;text-align:center}
+  header .sup{font-size:14px;letter-spacing:.5px;opacity:.9}
+  header h1{margin:4px 0 2px;font-size:20px;font-weight:bold;text-transform:uppercase}
+  header .sub{font-size:14px;opacity:.9}
+  .tabs{display:flex;gap:8px;max-width:1100px;margin:14px auto 0;padding:0 16px;flex-wrap:wrap}
+  .tab{flex:1;min-width:140px;text-align:center;padding:10px;background:#e9ebee;border:1px solid var(--line);border-radius:8px 8px 0 0;cursor:pointer;font-weight:bold;color:var(--mut)}
+  .tab.active{background:var(--card);color:var(--red);border-bottom-color:var(--card)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  label{display:block;font-weight:bold;margin:10px 0 4px;font-size:15px}
+  select,input,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;font-family:inherit;font-size:15px;background:#fff}
+  textarea{resize:vertical;min-height:62px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .btn{display:inline-block;padding:10px 18px;border:none;border-radius:8px;background:var(--red);color:#fff;font-weight:bold;font-size:15px;cursor:pointer;font-family:inherit}
+  .btn:hover{background:var(--red2)}
+  .btn.sec{background:#eef0f3;color:var(--ink);border:1px solid var(--line)}
+  .btn.gold{background:var(--gold);color:#3a2d08}
+  .btn.sm{padding:5px 11px;font-size:13.5px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .task{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px;margin:14px 0;background:#fcfcfa}
+  .task .tt{font-weight:bold;color:var(--red)}
+  .task .goi{font-size:13.5px;color:var(--mut);font-style:italic;margin-top:4px}
+  .task .meta{font-size:13.5px;color:var(--mut);margin-top:4px}
+  .fields{margin-top:10px}
+  .hint{font-size:13px;color:var(--mut);font-weight:normal}
+  .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12.5px;font-weight:bold;color:#fff}
+  .DHT{background:var(--ok)} .DTH{background:var(--prog)} .NCC{background:var(--warn)} .CHT{background:var(--bad)}
+  .pill.mo{background:var(--ok)} .pill.dong{background:#6b7280}
+  .msg{padding:10px 14px;border-radius:8px;margin:12px 0;font-size:14.5px;display:none}
+  .msg.ok{background:#e6f4ea;color:#0b6b2e;border:1px solid #a6d9b6;display:block}
+  .msg.err{background:#fdecec;color:#a11;border:1px solid #f1b4b4;display:block}
+  .msg.info{background:#eef4fb;color:#0b4d8f;border:1px solid #b9d4f0;display:block}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}
+  th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+  th{background:#f0ead9;color:#50410f;position:sticky;top:0}
+  .tblwrap{overflow:auto;max-height:62vh;border:1px solid var(--line);border-radius:8px}
+  .stat{display:inline-block;min-width:92px;text-align:center;padding:10px;margin:4px;border-radius:8px;background:#f5f6f8;border:1px solid var(--line)}
+  .stat b{display:block;font-size:22px}
+  .foot{text-align:center;color:var(--mut);font-size:13px;padding:16px}
+  .hide{display:none}
+  .legend{font-size:13px;color:var(--mut);margin-top:6px}
+  @media(max-width:640px){.row2{grid-template-columns:1fr}header h1{font-size:17px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="sup">ĐẢNG ỦY XÃ HÀM THUẬN</div>
+  <h1>Báo cáo số liệu thực hiện Nghị quyết số 04-NQ/TW</h1>
+  <div class="sub">Phụ lục kèm theo Công văn định kỳ cung cấp số liệu (CTHĐ số 24-CTr/TU và Chương trình số 47-CTr/TU)</div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-tab="donvi" onclick="switchTab('donvi')">📝 Đơn vị báo cáo</div>
+  <div class="tab" data-tab="quantri" onclick="switchTab('quantri')">📊 Quản trị</div>
+</div>
+
+<div class="wrap">
+
+<!-- ================= ĐƠN VỊ ================= -->
+<div id="tab-donvi">
+  <div class="card">
+    <div class="row2">
+      <div>
+        <label>Đơn vị báo cáo <span class="hint">(chọn đúng đơn vị của mình)</span></label>
+        <select id="donVi" onchange="renderForm()">
+          <option value="">— Chọn đơn vị —</option>
+        </select>
+      </div>
+      <div>
+        <label>Kỳ báo cáo <span class="hint">(do quản trị mở)</span></label>
+        <select id="ky" onchange="onKyChange()">
+          <option value="">— Chọn kỳ —</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div><label>Người tổng hợp <span class="hint">(không bắt buộc)</span></label><input id="nguoiNhap" placeholder="Họ tên"></div>
+      <div><label>Số điện thoại <span class="hint">(không bắt buộc)</span></label><input id="dienThoai" placeholder="SĐT liên hệ"></div>
+    </div>
+    <div class="legend">Trạng thái: <span class="pill DHT">ĐHT</span> đã hoàn thành ·
+      <span class="pill DTH">ĐTH</span> đang thực hiện, đúng tiến độ ·
+      <span class="pill NCC">NCC</span> có nguy cơ chậm ·
+      <span class="pill CHT">CHT</span> chậm/chưa hoàn thành</div>
+  </div>
+
+  <div id="dvMsg" class="msg"></div>
+  <div id="formArea"></div>
+
+  <div id="submitBar" class="card hide" style="text-align:right">
+    <button class="btn sec" onclick="renderForm()">↺ Làm mới</button>
+    <button class="btn" id="btnSave" onclick="submitData()">💾 Gửi / Cập nhật số liệu</button>
+  </div>
+</div>
+
+<!-- ================= QUẢN TRỊ ================= -->
+<div id="tab-quantri" class="hide">
+  <div class="card" id="loginBox">
+    <label>Mật khẩu quản trị</label>
+    <div class="row2">
+      <input id="adminPass" type="password" placeholder="Nhập mật khẩu" onkeydown="if(event.key==='Enter')adminLogin()">
+      <div><button class="btn" onclick="adminLogin()">Đăng nhập</button></div>
+    </div>
+    <div id="adminMsg" class="msg"></div>
+  </div>
+
+  <div id="adminPanel" class="hide">
+    <!-- Quản lý kỳ báo cáo -->
+    <div class="card">
+      <b>① Quản lý kỳ báo cáo</b>
+      <div class="hint" style="margin:4px 0 8px">Tạo kỳ để các đơn vị chọn và điền. Đóng kỳ sẽ ẩn khỏi danh sách cho đơn vị (dữ liệu vẫn giữ).</div>
+      <div class="row2">
+        <input id="newKy" placeholder="Tên kỳ, VD: Tháng 10/2026 / Quý IV/2026" onkeydown="if(event.key==='Enter')addKy()">
+        <div><button class="btn" onclick="addKy()">➕ Tạo kỳ mới</button></div>
+      </div>
+      <div id="kyAdminBox"></div>
+    </div>
+
+    <div class="card">
+      <b>② Theo dõi & xuất báo cáo</b>
+      <div class="row2" style="margin-top:8px">
+        <div>
+          <label>Lọc theo kỳ</label>
+          <select id="filterKy" onchange="renderAdmin()"><option value="">— Tất cả kỳ —</option></select>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap">
+          <button class="btn sec" onclick="loadAll()">↻ Tải lại</button>
+          <button class="btn gold" onclick="exportExcel()">⬇ Xuất Excel tổng (.xlsx)</button>
+        </div>
+      </div>
+      <div id="statBox" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <b>Tiến độ nộp theo đơn vị</b>
+      <div id="progressBox"></div>
+    </div>
+    <div class="card">
+      <b>Chi tiết số liệu đã nộp</b>
+      <div class="tblwrap"><table id="detailTbl"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="foot">Văn phòng Đảng ủy xã Hàm Thuận · Hệ thống thu thập số liệu trực tuyến</div>
+
+<script>
+/* ===================================================================
+   CẤU HÌNH — Phó CVP chỉnh phần này khi cần
+   =================================================================== */
+const CONFIG = {
+  // Dán URL Web App của Google Apps Script sau khi deploy (/exec).
+  // Để trống "" -> hệ thống chạy chế độ lưu cục bộ (localStorage) trên máy này để chạy thử.
+  GAS_URL: "https://script.google.com/macros/s/AKfycbzfOJ6_BnqKvpbozDSowwp5nCOZdfrj_5EK6obVhhi__ErZ2mhIxjPSFBMDp_lrqiut/exec",
+
+  // Mật khẩu vào trang Quản trị (đổi lại trước khi phát hành).
+  ADMIN_PASS: "vpdu",
+
+  // Danh mục đơn vị (key: viết tắt không dấu; ten: tên đầy đủ hiển thị & in).
+  UNITS: [
+    { key:"UBND",   ten:"Ủy ban nhân dân xã" },
+    { key:"HDND",   ten:"Hội đồng nhân dân xã" },
+    { key:"MTTQ",   ten:"Ủy ban Mặt trận Tổ quốc Việt Nam xã" },
+    { key:"CONGAN", ten:"Đảng ủy Công an xã" },
+    { key:"BANXDD", ten:"Ban xây dựng Đảng Đảng ủy xã" },
+    { key:"UBKT",   ten:"Ủy ban Kiểm tra Đảng ủy xã" },
+    { key:"VPDU",   ten:"Văn phòng Đảng ủy xã" }
+  ],
+
+  // 7 nhiệm vụ. "units" = những đơn vị phải báo cáo nhiệm vụ đó (theo cột Đơn vị phụ trách).
+  TASKS: [
+    { stt:1, thoiHan:"Thường xuyên",
+      noiDung:"Thực hiện nghiêm quy chế, quy định, quy trình công tác; tiêu chuẩn, định mức, chế độ chi tiêu công; công khai, minh bạch, trách nhiệm giải trình; chuyển đổi vị trí công tác và giải pháp phòng ngừa PCTNLPTC.",
+      goiY:"Số nội dung thực hiện; số công khai; số trường hợp chuyển vị trí",
+      donViPT:"UBND xã; các cơ quan tham mưu, giúp việc Đảng ủy xã",
+      units:["UBND","BANXDD","UBKT","VPDU"] },
+    { stt:2, thoiHan:"Thường xuyên",
+      noiDung:"Tăng cường kiểm tra, giám sát; chủ động phát hiện và xử lý nghiêm hành vi tham nhũng, lãng phí, tiêu cực.",
+      goiY:"Số cuộc; vụ việc; số xử lý; giá trị/tài sản",
+      donViPT:"UBND xã; UBKT Đảng ủy xã; Đảng ủy Công an xã",
+      units:["UBND","UBKT","CONGAN"] },
+    { stt:3, thoiHan:"Thường xuyên",
+      noiDung:"Tăng cường giám sát tình hình hoạt động của đội ngũ cán bộ cơ sở; xây dựng đội ngũ cán bộ liêm chính, gần dân, sát cơ sở, phục vụ Nhân dân.",
+      goiY:"Số cán bộ được giám sát; nội dung; kiến nghị",
+      donViPT:"UBND xã; các cơ quan tham mưu, giúp việc Đảng ủy xã",
+      units:["UBND","BANXDD","UBKT","VPDU"] },
+    { stt:4, thoiHan:"Thường xuyên",
+      noiDung:"Tăng cường kiểm soát quyền lực, PCTNLPTC trong công tác cán bộ, quản lý và sử dụng tài chính, tài sản công, kiểm tra, giám sát và vận hành chính quyền trên địa bàn xã.",
+      goiY:"Số cuộc; nội dung; kiến nghị; khắc phục",
+      donViPT:"UBND xã; các cơ quan tham mưu, giúp việc Đảng ủy xã",
+      units:["UBND","BANXDD","UBKT","VPDU"] },
+    { stt:5, thoiHan:"Thường xuyên",
+      noiDung:"Nâng cao vai trò, trách nhiệm của cấp ủy, tổ chức đảng, người đứng đầu trong PCTNLPTC; nâng cao hiệu quả giáo dục liêm chính trong cán bộ, đảng viên, công chức, viên chức, doanh nghiệp và Nhân dân.",
+      goiY:"Số nội dung chỉ đạo; số hoạt động giáo dục; đối tượng tham gia",
+      donViPT:"Các cơ quan tham mưu, giúp việc Đảng ủy xã",
+      units:["BANXDD","UBKT","VPDU"] },
+    { stt:6, thoiHan:"Thường xuyên",
+      noiDung:"Chủ động, kịp thời nắm bắt thông tin, dư luận; giải quyết kiến nghị, phản ánh, khiếu nại, tố cáo của Nhân dân; thực hiện trách nhiệm người đứng đầu trong tiếp, đối thoại với Nhân dân.",
+      goiY:"Số phản ánh/đơn; số giải quyết; số cuộc tiếp/đối thoại; tỷ lệ",
+      donViPT:"HĐND xã; UBND xã; Ủy ban MTTQ Việt Nam xã; các cơ quan tham mưu, giúp việc Đảng ủy xã",
+      units:["HDND","UBND","MTTQ","BANXDD","UBKT","VPDU"] },
+    { stt:7, thoiHan:"Thường xuyên",
+      noiDung:"Tăng cường củng cố, nâng cao vai trò, sức chiến đấu của đảng bộ, chi bộ, tổ chức cơ sở đảng; quản lý, giám sát đảng viên; chủ động phòng ngừa, kiểm tra, giám sát, xử lý khi có dấu hiệu vi phạm, tham nhũng, lãng phí, tiêu cực.",
+      goiY:"Số tổ chức/đảng viên; số cuộc; số dấu hiệu/vụ việc; kết quả xử lý",
+      donViPT:"Các cơ quan tham mưu, giúp việc Đảng ủy xã",
+      units:["BANXDD","UBKT","VPDU"] }
+  ]
+};
+
+const TRANG_THAI = [
+  {v:"", t:"— Chọn —"},
+  {v:"ĐHT", t:"ĐHT – đã hoàn thành"},
+  {v:"ĐTH", t:"ĐTH – đang thực hiện, đúng tiến độ"},
+  {v:"NCC", t:"NCC – có nguy cơ chậm"},
+  {v:"CHT", t:"CHT – chậm/chưa hoàn thành"}
+];
+const COLS = [
+  {k:"dahoanthanh", t:"Đã hoàn thành: kết quả, số liệu"},
+  {k:"dangthuchien", t:"Đang thực hiện: tiến độ, % và phần còn lại"},
+  {k:"chuahoanthanh", t:"Chậm/chưa hoàn thành: nguyên nhân, trách nhiệm"},
+  {k:"khokhan", t:"Khó khăn, vướng mắc"},
+  {k:"dexuat", t:"Đề xuất, kiến nghị"}
+];
+const LOCAL = !CONFIG.GAS_URL;
+const LKEY = "nq04_hamthuan";
+const LKEY_KY = "nq04_hamthuan_kys";
+const tenUnit = k => (CONFIG.UNITS.find(u=>u.key===k)||{}).ten || k;
+let KYS = [];   // [{ten, trangThai:'mo'|'dong', ngayTao}]
+
+/* ---------- Tabs ---------- */
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
+  document.getElementById('tab-donvi').classList.toggle('hide',t!=='donvi');
+  document.getElementById('tab-quantri').classList.toggle('hide',t!=='quantri');
+}
+
+/* ---------- Khởi tạo ---------- */
+window.onload = function(){
+  const sel = document.getElementById('donVi');
+  CONFIG.UNITS.forEach(u=>{ const o=document.createElement('option'); o.value=u.key; o.textContent=u.ten; sel.appendChild(o); });
+  if(LOCAL) showMsg('dvMsg','info','Đang chạy chế độ lưu cục bộ (chưa cấu hình máy chủ). Dữ liệu lưu trên trình duyệt máy này — dùng để chạy thử.');
+  loadKyList();
+};
+
+function showMsg(id,type,txt){ const e=document.getElementById(id); e.className='msg '+type; e.textContent=txt; if(type==='ok') setTimeout(()=>{e.className='msg';},4000); }
+
+/* ===================================================================
+   KỲ BÁO CÁO
+   =================================================================== */
+function localKys(){ try{return JSON.parse(localStorage.getItem(LKEY_KY)||'[]');}catch(e){return [];} }
+function localSaveKys(a){ localStorage.setItem(LKEY_KY,JSON.stringify(a)); }
+
+async function loadKyList(){
+  try{
+    if(LOCAL){ KYS = localKys(); }
+    else{
+      const res = await fetch(`${CONFIG.GAS_URL}?action=kylist`);
+      const j = await res.json(); KYS = (j.ok && j.kys) ? j.kys : [];
+    }
+  }catch(e){ KYS = []; }
+  fillKySelectForUnit();
+}
+
+function fillKySelectForUnit(){
+  const sel = document.getElementById('ky'); const cur = sel.value;
+  const mo = KYS.filter(k=>k.trangThai!=='dong');
+  sel.innerHTML = '<option value="">— Chọn kỳ —</option>' + mo.map(k=>`<option value="${esc(k.ten)}">${esc(k.ten)}</option>`).join('');
+  if(mo.some(k=>k.ten===cur)) sel.value = cur;
+  if(!mo.length){
+    const o=document.createElement('option'); o.disabled=true; o.textContent='(Quản trị chưa mở kỳ nào)'; sel.appendChild(o);
+  }
+}
+
+async function addKy(){
+  const inp = document.getElementById('newKy'); const ten = inp.value.trim();
+  if(!ten) return;
+  if(KYS.some(k=>k.ten===ten)){ alert('Kỳ này đã tồn tại.'); return; }
+  const rec = {ten, trangThai:'mo', ngayTao:new Date().toISOString()};
+  try{
+    if(LOCAL){ const a=localKys(); a.push(rec); localSaveKys(a); }
+    else{ await adminPost({action:'addKy', ten}); }
+    await loadKyList(); renderKyAdmin(); refreshFilterKy();
+    inp.value='';
+  }catch(e){ alert('Không tạo được kỳ: '+e.message); }
+}
+
+async function toggleKy(ten){
+  const k = KYS.find(x=>x.ten===ten); if(!k) return;
+  const moi = k.trangThai==='dong' ? 'mo' : 'dong';
+  try{
+    if(LOCAL){ const a=localKys(); const t=a.find(x=>x.ten===ten); if(t) t.trangThai=moi; localSaveKys(a); }
+    else{ await adminPost({action:'setKy', ten, trangThai:moi}); }
+    await loadKyList(); renderKyAdmin();
+  }catch(e){ alert('Lỗi: '+e.message); }
+}
+
+async function delKy(ten){
+  if(!confirm('Xóa kỳ "'+ten+'" khỏi danh sách? (Số liệu các đơn vị đã nộp cho kỳ này KHÔNG bị xóa.)')) return;
+  try{
+    if(LOCAL){ localSaveKys(localKys().filter(x=>x.ten!==ten)); }
+    else{ await adminPost({action:'delKy', ten}); }
+    await loadKyList(); renderKyAdmin(); refreshFilterKy();
+  }catch(e){ alert('Lỗi: '+e.message); }
+}
+
+function renderKyAdmin(){
+  const box = document.getElementById('kyAdminBox');
+  if(!KYS.length){ box.innerHTML='<div class="hint" style="margin-top:8px">Chưa có kỳ nào. Hãy tạo kỳ đầu tiên.</div>'; return; }
+  let h='<table><thead><tr><th>Kỳ báo cáo</th><th>Trạng thái</th><th>Số đơn vị đã nộp</th><th>Thao tác</th></tr></thead><tbody>';
+  KYS.forEach(k=>{
+    const sl = new Set(ALL.filter(r=>r.ky===k.ten).map(r=>r.donVi)).size;
+    h+=`<tr><td>${esc(k.ten)}</td>`+
+       `<td>${k.trangThai==='dong'?'<span class="pill dong">Đã đóng</span>':'<span class="pill mo">Đang mở</span>'}</td>`+
+       `<td style="text-align:center">${sl}/${CONFIG.UNITS.length}</td>`+
+       `<td><button class="btn sec sm" onclick="toggleKy('${esc(k.ten)}')">${k.trangThai==='dong'?'Mở lại':'Đóng'}</button> `+
+       `<button class="btn sec sm" onclick="delKy('${esc(k.ten)}')">Xóa</button></td></tr>`;
+  });
+  h+='</tbody></table>';
+  box.innerHTML=h;
+}
+
+/* ---------- Form đơn vị ---------- */
+function onKyChange(){ loadExisting(); }
+
+function renderForm(){
+  const key = document.getElementById('donVi').value;
+  const area = document.getElementById('formArea');
+  const bar = document.getElementById('submitBar');
+  area.innerHTML=''; bar.classList.add('hide');
+  if(!key) return;
+  const tasks = CONFIG.TASKS.filter(t=>t.units.includes(key));
+  if(!tasks.length){ area.innerHTML='<div class="card">Đơn vị này không có nhiệm vụ cần báo cáo trong phụ lục.</div>'; return; }
+  tasks.forEach(t=>{
+    const d=document.createElement('div'); d.className='task'; d.dataset.stt=t.stt;
+    let inputs='';
+    COLS.forEach(c=>{ inputs += `<label>${c.t}</label><textarea data-f="${c.k}"></textarea>`; });
+    let opts = TRANG_THAI.map(s=>`<option value="${s.v}">${s.t}</option>`).join('');
+    d.innerHTML = `
+      <div class="tt">Nhiệm vụ ${t.stt}</div>
+      <div>${t.noiDung}</div>
+      <div class="goi">Chỉ tiêu gợi ý: ${t.goiY}</div>
+      <div class="meta">Đơn vị phụ trách: ${t.donViPT} · Thời hạn: ${t.thoiHan}</div>
+      <div class="fields">${inputs}
+        <label>Trạng thái đề nghị thống nhất</label>
+        <select data-f="trangthai">${opts}</select>
+      </div>`;
+    area.appendChild(d);
+  });
+  bar.classList.remove('hide');
+  loadExisting();
+}
+
+function collect(){
+  const key=document.getElementById('donVi').value;
+  const ky=document.getElementById('ky').value.trim();
+  const items=[];
+  document.querySelectorAll('#formArea .task').forEach(d=>{
+    const stt=+d.dataset.stt; const t=CONFIG.TASKS.find(x=>x.stt===stt);
+    const rec={stt, noiDung:t.noiDung, thoiHan:t.thoiHan, donViPT:t.donViPT};
+    d.querySelectorAll('[data-f]').forEach(el=>rec[el.dataset.f]=el.value.trim());
+    items.push(rec);
+  });
+  return {ky, donVi:key, donViTen:tenUnit(key),
+          nguoiNhap:document.getElementById('nguoiNhap').value.trim(),
+          dienThoai:document.getElementById('dienThoai').value.trim(),
+          items, thoiGianNop:new Date().toISOString()};
+}
+
+function fill(items){
+  if(!items) return;
+  document.querySelectorAll('#formArea .task').forEach(d=>{
+    const stt=+d.dataset.stt; const rec=items.find(i=>+i.stt===stt); if(!rec) return;
+    d.querySelectorAll('[data-f]').forEach(el=>{ if(rec[el.dataset.f]!=null) el.value=rec[el.dataset.f]; });
+  });
+}
+function clearFields(){ document.querySelectorAll('#formArea [data-f]').forEach(el=>el.value=''); }
+
+/* ---------- Lưu / tải (GAS hoặc localStorage) ---------- */
+function localAll(){ try{return JSON.parse(localStorage.getItem(LKEY)||'[]');}catch(e){return [];} }
+function localSave(rec){
+  let a=localAll(); a=a.filter(x=>!(x.donVi===rec.donVi && x.ky===rec.ky)); a.push(rec);
+  localStorage.setItem(LKEY,JSON.stringify(a));
+}
+
+async function loadExisting(){
+  const key=document.getElementById('donVi').value, ky=document.getElementById('ky').value.trim();
+  if(!key||!ky){ return; }
+  clearFields();
+  try{
+    if(LOCAL){ const r=localAll().find(x=>x.donVi===key&&x.ky===ky); if(r){ fill(r.items); showMsg('dvMsg','info','Đã nạp số liệu đã lưu trước đó của đơn vị cho kỳ này — có thể chỉnh và gửi lại.'); } return; }
+    const u=`${CONFIG.GAS_URL}?action=load&donVi=${encodeURIComponent(key)}&ky=${encodeURIComponent(ky)}`;
+    const res=await fetch(u); const j=await res.json();
+    if(j.ok && j.items && j.items.length){ fill(j.items); showMsg('dvMsg','info','Đã nạp số liệu đã nộp trước đó — có thể chỉnh và gửi lại.'); }
+  }catch(e){ /* im lặng */ }
+}
+
+async function submitData(){
+  const data=collect();
+  if(!data.donVi){ showMsg('dvMsg','err','Vui lòng chọn đơn vị.'); return; }
+  if(!data.ky){ showMsg('dvMsg','err','Vui lòng chọn kỳ báo cáo.'); return; }
+  const btn=document.getElementById('btnSave'); btn.disabled=true; btn.textContent='Đang gửi…';
+  try{
+    if(LOCAL){ localSave(data); }
+    else{
+      const res=await fetch(CONFIG.GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'save',data})});
+      const j=await res.json(); if(!j.ok) throw new Error(j.error||'Lỗi máy chủ');
+    }
+    showMsg('dvMsg','ok','✔ Đã gửi số liệu của '+data.donViTen+' (kỳ '+data.ky+'). Cảm ơn anh/chị!');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(e){ showMsg('dvMsg','err','Gửi không thành công: '+e.message+'. Vui lòng thử lại.'); }
+  btn.disabled=false; btn.textContent='💾 Gửi / Cập nhật số liệu';
+}
+
+/* ===================================================================
+   QUẢN TRỊ
+   =================================================================== */
+let ALL=[];
+function adminLogin(){
+  const p=document.getElementById('adminPass').value;
+  if(p!==CONFIG.ADMIN_PASS){ showMsg('adminMsg','err','Mật khẩu không đúng.'); return; }
+  document.getElementById('loginBox').classList.add('hide');
+  document.getElementById('adminPanel').classList.remove('hide');
+  loadAll();
+}
+
+// POST có xác thực cho các thao tác quản trị (chỉ dùng khi ONLINE)
+async function adminPost(payload){
+  payload.token = CONFIG.ADMIN_PASS;
+  const res = await fetch(CONFIG.GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+  const j = await res.json(); if(!j.ok) throw new Error(j.error||'Lỗi máy chủ'); return j;
+}
+
+async function loadAll(){
+  try{
+    await loadKyList();
+    if(LOCAL){ ALL=localAll(); }
+    else{
+      const res=await fetch(`${CONFIG.GAS_URL}?action=all&token=${encodeURIComponent(CONFIG.ADMIN_PASS)}`);
+      const j=await res.json(); if(!j.ok) throw new Error(j.error||'Lỗi'); ALL=j.records||[];
+    }
+    refreshFilterKy();
+    renderKyAdmin();
+    renderAdmin();
+  }catch(e){ alert('Không tải được dữ liệu: '+e.message); }
+}
+
+function refreshFilterKy(){
+  const names = [...new Set([...KYS.map(k=>k.ten), ...ALL.map(r=>r.ky)])];
+  const fk=document.getElementById('filterKy'); const cur=fk.value;
+  fk.innerHTML='<option value="">— Tất cả kỳ —</option>'+names.map(k=>`<option value="${esc(k)}">${esc(k)}</option>`).join('');
+  if(names.includes(cur)) fk.value=cur;
+}
+
+function filtered(){ const k=document.getElementById('filterKy').value; return k?ALL.filter(r=>r.ky===k):ALL; }
+
+function renderAdmin(){
+  const recs=filtered();
+  const cnt={'ĐHT':0,'ĐTH':0,'NCC':0,'CHT':0};
+  recs.forEach(r=>r.items.forEach(i=>{ if(i.trangthai){cnt[i.trangthai]=(cnt[i.trangthai]||0)+1;} }));
+  document.getElementById('statBox').innerHTML =
+    `<span class="stat"><b>${recs.length}</b>lượt nộp</span>`+
+    `<span class="stat" style="border-color:var(--ok)"><b style="color:var(--ok)">${cnt['ĐHT']}</b>ĐHT</span>`+
+    `<span class="stat" style="border-color:var(--prog)"><b style="color:var(--prog)">${cnt['ĐTH']}</b>ĐTH</span>`+
+    `<span class="stat" style="border-color:var(--warn)"><b style="color:var(--warn)">${cnt['NCC']}</b>NCC</span>`+
+    `<span class="stat" style="border-color:var(--bad)"><b style="color:var(--bad)">${cnt['CHT']}</b>CHT</span>`;
+
+  const submitted = new Set(recs.map(r=>r.donVi));
+  let ph='<table><thead><tr><th>Đơn vị</th><th>Số nhiệm vụ phải báo cáo</th><th>Tình trạng</th></tr></thead><tbody>';
+  CONFIG.UNITS.forEach(u=>{
+    const n=CONFIG.TASKS.filter(t=>t.units.includes(u.key)).length;
+    const done=submitted.has(u.key);
+    ph+=`<tr><td>${u.ten}</td><td style="text-align:center">${n}</td>`+
+        `<td>${done?'<span class="pill DHT">Đã nộp</span>':'<span class="pill CHT">Chưa nộp</span>'}</td></tr>`;
+  });
+  ph+='</tbody></table>';
+  document.getElementById('progressBox').innerHTML=ph;
+
+  const head=['Kỳ','Đơn vị','STT','Nội dung nhiệm vụ','Thời hạn',...COLS.map(c=>c.t),'Trạng thái'];
+  document.querySelector('#detailTbl thead').innerHTML='<tr>'+head.map(h=>`<th>${h}</th>`).join('')+'</tr>';
+  let body='';
+  recs.forEach(r=>r.items.forEach(i=>{
+    body+='<tr>'+[r.ky,r.donViTen||tenUnit(r.donVi),i.stt,i.noiDung,i.thoiHan,
+      i.dahoanthanh,i.dangthuchien,i.chuahoanthanh,i.khokhan,i.dexuat].map(x=>`<td>${esc(x||'')}</td>`).join('')+
+      `<td>${i.trangthai?`<span class="pill ${i.trangthai.replace('Đ','D')}">${i.trangthai}</span>`:''}</td></tr>`;
+  }));
+  document.querySelector('#detailTbl tbody').innerHTML = body || '<tr><td colspan="11" style="text-align:center;color:#888">Chưa có dữ liệu</td></tr>';
+}
+
+/* ---------- Xuất Excel tổng ---------- */
+function exportExcel(){
+  const recs=filtered();
+  if(!recs.length){ alert('Chưa có dữ liệu để xuất.'); return; }
+  const wb=XLSX.utils.book_new();
+
+  const h1=['Kỳ báo cáo','Đơn vị báo cáo','STT','Nhiệm vụ/sản phẩm','Đơn vị phụ trách','Thời hạn',
+    'Đã hoàn thành: kết quả, số liệu','Đang thực hiện: tiến độ, % và phần còn lại',
+    'Chậm/chưa hoàn thành: nguyên nhân, trách nhiệm','Khó khăn, vướng mắc','Đề xuất, kiến nghị','Trạng thái','Người tổng hợp','Điện thoại','Thời gian nộp'];
+  const d1=[h1];
+  recs.forEach(r=>r.items.forEach(i=>{
+    d1.push([r.ky, r.donViTen||tenUnit(r.donVi), i.stt, i.noiDung, i.donViPT||'', i.thoiHan,
+      i.dahoanthanh||'', i.dangthuchien||'', i.chuahoanthanh||'', i.khokhan||'', i.dexuat||'', i.trangthai||'',
+      r.nguoiNhap||'', r.dienThoai||'', fmtDate(r.thoiGianNop)]);
+  }));
+  const ws1=XLSX.utils.aoa_to_sheet(d1);
+  ws1['!cols']=[{wch:16},{wch:28},{wch:5},{wch:46},{wch:30},{wch:12},{wch:30},{wch:30},{wch:28},{wch:24},{wch:24},{wch:9},{wch:18},{wch:13},{wch:18}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Chi tiết');
+
+  const cnt={'ĐHT':0,'ĐTH':0,'NCC':0,'CHT':0,'(chưa chọn)':0};
+  recs.forEach(r=>r.items.forEach(i=>{ cnt[i.trangthai||'(chưa chọn)']=(cnt[i.trangthai||'(chưa chọn)']||0)+1; }));
+  const d2=[['Trạng thái','Diễn giải','Số lượt'],
+    ['ĐHT','Đã hoàn thành',cnt['ĐHT']],
+    ['ĐTH','Đang thực hiện, đúng tiến độ',cnt['ĐTH']],
+    ['NCC','Có nguy cơ chậm',cnt['NCC']],
+    ['CHT','Chậm/chưa hoàn thành',cnt['CHT']],
+    ['(chưa chọn)','Chưa đánh giá',cnt['(chưa chọn)']]];
+  const ws2=XLSX.utils.aoa_to_sheet(d2); ws2['!cols']=[{wch:12},{wch:34},{wch:8}];
+  XLSX.utils.book_append_sheet(wb,ws2,'Tổng hợp trạng thái');
+
+  const submitted=new Set(recs.map(r=>r.donVi));
+  const d3=[['Đơn vị','Số nhiệm vụ phải báo cáo','Tình trạng','Kỳ đã nộp']];
+  CONFIG.UNITS.forEach(u=>{
+    const n=CONFIG.TASKS.filter(t=>t.units.includes(u.key)).length;
+    const kys=[...new Set(ALL.filter(r=>r.donVi===u.key).map(r=>r.ky))].join('; ');
+    d3.push([u.ten,n,submitted.has(u.key)?'Đã nộp':'Chưa nộp',kys]);
+  });
+  const ws3=XLSX.utils.aoa_to_sheet(d3); ws3['!cols']=[{wch:30},{wch:24},{wch:12},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,ws3,'Tiến độ nộp');
+
+  const ky=document.getElementById('filterKy').value || 'tat_ca_ky';
+  XLSX.writeFile(wb,`Tong_hop_NQ04_${ky.replace(/[^\p{L}\p{N}]+/gu,'_')}.xlsx`);
+}
+function fmtDate(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return iso; const p=n=>('0'+n).slice(-2); return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`; }
+function esc(x){ return (x==null?'':x.toString()).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+</script>
+</body>
+</html>
